@@ -520,7 +520,7 @@
         }
 
         function generateWordDocument(fileName, originalText, results, analysisTypes) {
-            const { Document, Packer, Paragraph, HeadingLevel } = docx;
+            const { Document, Packer, Paragraph, HeadingLevel } = window.docx;
             const sections = [
                 { children: [new Paragraph({ text: `Analysis Report for: ${fileName}`, heading: HeadingLevel.TITLE })] },
                 { children: [new Paragraph({ text: "Original Text (Excerpt)", heading: HeadingLevel.HEADING_1 }), new Paragraph(originalText.substring(0, 2000) + (originalText.length > 2000 ? "..." : ""))] }
