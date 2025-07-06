@@ -520,6 +520,10 @@
         }
 
         function generateWordDocument(fileName, originalText, results, analysisTypes) {
+            if (!window.docx) {
+                console.error("The 'docx' library is not available on the window object.");
+                throw new Error("Word document generation library (docx) failed to load. Please check your internet connection or ad blocker and refresh the page.");
+            }
             const { Document, Packer, Paragraph, HeadingLevel } = window.docx;
             const sections = [
                 { children: [new Paragraph({ text: `Analysis Report for: ${fileName}`, heading: HeadingLevel.TITLE })] },
@@ -559,4 +563,4 @@
 
     </script>
 </body>
-</html>
+</html
