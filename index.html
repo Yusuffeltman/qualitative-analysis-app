@@ -482,9 +482,10 @@
                     generateWordDocument(file.name, fileContent, analysisResults, selectedAnalyses);
 
                 } catch (error) {
+                    console.error('Error processing file:', file.name, error);
                     const errorLink = document.createElement('p');
-                    errorLink.className = 'text-red-500';
-                    errorLink.textContent = `Failed to process ${file.name}. See console for details.`;
+                    errorLink.className = 'text-red-500 font-medium';
+                    errorLink.textContent = `Failed to process "${file.name}". Reason: ${error.message}`;
                     reportLinks.appendChild(errorLink);
                 }
             }
