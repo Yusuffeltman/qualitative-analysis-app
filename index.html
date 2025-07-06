@@ -157,7 +157,7 @@
             auth: {
                 clientId: MSAL_CLIENT_ID,
                 authority: "https://login.microsoftonline.com/common",
-                redirectUri: "https://qualitative-analysis-app.vercel.app",
+                redirectUri: window.location.origin,
             },
             cache: {
                 cacheLocation: "sessionStorage", 
@@ -329,11 +329,25 @@
                         Authorization: `Bearer ${accessToken}`
                     }
                 });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error("Graph API Error:", errorData);
+                    let userMessage = `Failed to retrieve files. Status: ${response.status}.`;
+                    if (response.status === 403) {
+                        userMessage += "\n\nThis 'Forbidden' error means the app does not have the required API permissions. Please go to your Azure App Registration, click 'API permissions', and ensure 'Files.Read.All' is added and granted admin consent.";
+                    }
+                    throw new Error(userMessage);
+                }
+
                 const data = await response.json();
                 return data.value;
             } catch (error) {
                 console.error("Could not get files from OneDrive", error);
-                showMessageModal("OneDrive Error", "Failed to retrieve files. Your session might have expired. Please try signing out and in again.");
+                // If the error is already a user-friendly message, show it directly.
+                // Otherwise, show a generic message.
+                const message = error.message.includes("Failed to retrieve files") ? error.message : "An unexpected error occurred while fetching files. Your session might have expired. Please try signing out and in again.";
+                showMessageModal("OneDrive Error", message);
                 return [];
             }
         }
